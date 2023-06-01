@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
@@ -55,11 +56,14 @@ function UserGames() {
               <div className="card-body">
                 <h5 className="card-title">Game ID: {game.id}</h5>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary me-2"
                   onClick={() => copyLink(game.id)}
                 >
                   Copy Link
                 </button>
+                <Link to={`/image/${game.id}`} className="btn btn-secondary">
+                  Go to Image
+                </Link>
               </div>
             </div>
           </div>
