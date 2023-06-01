@@ -59,8 +59,6 @@ const useFirebaseUpload = (image, user) => {
             });
         }
       );
-    } else {
-      setError(new Error("Invalid file type. Please upload an image."));
     }
   }, [image, user]);
 

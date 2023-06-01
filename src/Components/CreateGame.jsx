@@ -18,15 +18,54 @@ function CreateGame() {
   };
 
   if (!user) {
-    return <div>Please login to create a game</div>;
+    return (
+      <div className="alert alert-danger" role="alert">
+        Please login to create a game
+      </div>
+    );
   }
 
   return (
-    <div className="create-game">
-      <input type="file" onChange={handleChange} />
-      <div>Progress: {progress}%</div>
-      {url && <img src={url} alt="uploaded" />}
-      {error && <div>Error: {error.message}</div>}
+    <div className="create-game container mt-5">
+      <form>
+        <div className="mb-3">
+          <label htmlFor="gameFile" className="form-label">
+            Upload Game Image
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="gameFile"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          {progress > 0 && (
+            <div className="progress">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: `${progress}%` }}
+                aria-valuenow={progress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                {progress}%
+              </div>
+            </div>
+          )}
+        </div>
+        {url && (
+          <div className="mb-3">
+            <img src={url} alt="uploaded" className="img-thumbnail" />
+          </div>
+        )}
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            Error: {error.message}
+          </div>
+        )}
+      </form>
     </div>
   );
 }

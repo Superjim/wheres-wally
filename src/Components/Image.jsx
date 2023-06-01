@@ -33,14 +33,22 @@ function Image() {
   }, [id]);
 
   if (!image) {
-    return <div>Loading...</div>;
+    return (
+      <div className="alert alert-warning" role="alert">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h2>Image</h2>
-      <img src={image} alt="uploaded" />
-      <p>Uploaded by User ID: {userId}</p>
+    <div className="container mt-5">
+      <div className="card">
+        <img src={image} className="card-img-top" alt="uploaded" />
+        <div className="card-body">
+          <h5 className="card-title">Image</h5>
+          <p className="card-text">Uploaded by User ID: {userId}</p>
+        </div>
+      </div>
     </div>
   );
 }

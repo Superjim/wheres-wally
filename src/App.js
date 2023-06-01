@@ -5,6 +5,7 @@ import Image from "./Components/Image";
 import Header from "./Components/Header";
 import Settings from "./Components/Settings";
 import UserGames from "./Components/UserGames";
+import CreateGame from "./Components/CreateGame";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/create-game" element={<CreateGame />} />
         <Route path="/game/:id" element={<Image />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/my-games" element={<UserGames />} />

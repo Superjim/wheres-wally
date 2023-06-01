@@ -19,7 +19,10 @@ function UserGames() {
             where("userId", "==", user.uid)
           );
           const querySnapshot = await getDocs(q);
-          const userGames = querySnapshot.docs.map((doc) => doc.data());
+          const userGames = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
           setGames(userGames);
         } else {
           console.log("Please login to see your games");
@@ -32,18 +35,36 @@ function UserGames() {
     fetchUserGames();
   }, [user]);
 
+  const copyLink = (id) => {
+    const link = `https://whereswally.netlify.app/game/${id}`;
+    navigator.clipboard.writeText(link);
+  };
+
   if (!games) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className="container mt-5">
       <h1>Your Games</h1>
-      {games.map((game, index) => (
-        <div key={index}>
-          <img src={game.url} alt="uploaded game" />
-        </div>
-      ))}
+      <div className="row">
+        {games.map((game, index) => (
+          <div className="col-md-4" key={index}>
+            <div className="card mb-4">
+              <img src={game.url} alt="uploaded" className="card-img-top" />
+              <div className="card-body">
+                <h5 className="card-title">Game ID: {game.id}</h5>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => copyLink(game.id)}
+                >
+                  Copy Link
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
