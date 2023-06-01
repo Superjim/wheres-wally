@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
   const auth = getAuth();
 
-  //run every time user login, out, or their token changes
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -14,12 +18,13 @@ export const useAuth = () => {
     return () => unsubscribe();
   }, [auth]);
 
-  const login = async (email, password) => {
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Login failed:", error);
-      //handlr
+      //handle
     }
   };
 
@@ -28,9 +33,9 @@ export const useAuth = () => {
       await signOut(auth);
     } catch (error) {
       console.error("Logout failed:", error);
-      //handle
+      //handlr
     }
   };
 
-  return { user, login, logout };
+  return { user, loginWithGoogle, logout };
 };

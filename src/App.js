@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Components/Home";
 import Image from "./Components/Image";
 import Header from "./Components/Header";
+import Settings from "./Components/Settings";
+import UserGames from "./Components/UserGames";
 
 function App() {
   return (
@@ -10,7 +12,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/image/:id" element={<Image />} />
+        <Route path="/game/:id" element={<Image />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/my-games" element={<UserGames />} />
       </Routes>
     </Router>
   );

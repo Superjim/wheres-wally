@@ -9,6 +9,7 @@ const db = getFirestore(app);
 function Image() {
   const { id } = useParams();
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const getImage = async () => {
@@ -16,9 +17,11 @@ function Image() {
         const docRef = doc(db, "images", id);
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists()) {
-          setImage(docSnapshot.data());
+          setImage(docSnapshot.data().url);
+          setUserId(docSnapshot.data().userId);
         } else {
           setImage(null);
+          setUserId(null);
           console.error("Image doesn't exist:", id);
         }
       } catch (error) {
@@ -36,7 +39,8 @@ function Image() {
   return (
     <div>
       <h2>Image</h2>
-      <img src={image.url} alt="uploaded" />
+      <img src={image} alt="uploaded" />
+      <p>Uploaded by User ID: {userId}</p>
     </div>
   );
 }

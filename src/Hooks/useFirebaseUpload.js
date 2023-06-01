@@ -14,14 +14,13 @@ const storage = getStorage(app);
 //fireSTORE database ref
 const db = getFirestore(app);
 
-const useFirebaseUpload = (image) => {
+const useFirebaseUpload = (image, user) => {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (image && image.type.includes("image/")) {
-      //console.log("Uploading image:", image);
+    if (image && image.type.includes("image/") && user) {
       const storageRef = ref(storage, image.name);
 
       const uploadTask = uploadBytesResumable(storageRef, image);
@@ -38,17 +37,16 @@ const useFirebaseUpload = (image) => {
           console.error("Error uploading image:", err);
         },
         () => {
-          //console.log("Upload complete");
-
           getDownloadURL(uploadTask.snapshot.ref)
             .then((downloadURL) => {
               setUrl(downloadURL);
-              //console.log("image URL:", downloadURL);
 
-              //console.log("adding document to fireSTORE database");
-              addDoc(collection(db, "images"), { url: downloadURL })
+              addDoc(collection(db, "images"), {
+                url: downloadURL,
+                userId: user.uid, // store userId in document too
+              })
                 .then((docRef) => {
-                  //console.log("document added ID:", docRef.id);
+                  console.log("document added ID:", docRef.id);
                 })
                 .catch((err) => {
                   setError(err);
@@ -64,7 +62,7 @@ const useFirebaseUpload = (image) => {
     } else {
       setError(new Error("Invalid file type. Please upload an image."));
     }
-  }, [image]);
+  }, [image, user]);
 
   return { progress, url, error };
 };

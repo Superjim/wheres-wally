@@ -2,7 +2,7 @@ import { useAuth } from "../Hooks/useAuth";
 import { Link } from "react-router-dom";
 
 function Header() {
-  const { user, login, logout } = useAuth();
+  const { user, loginWithGoogle, logout } = useAuth();
 
   return (
     <header>
@@ -10,10 +10,11 @@ function Header() {
         {user ? (
           <>
             <button onClick={logout}>Logout</button>
-            <Link to="/control-panel">Settings</Link>
+            <Link to="/settings">Settings</Link>
+            <Link to="/my-games">My Games</Link>
           </>
         ) : (
-          <button onClick={login}>Login</button>
+          <button onClick={loginWithGoogle}>Login with Google</button>
         )}
       </nav>
     </header>
