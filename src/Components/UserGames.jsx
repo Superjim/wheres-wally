@@ -61,7 +61,7 @@ function UserGames() {
                 >
                   Copy Link
                 </button>
-                <Link to={`/image/${game.id}`} className="btn btn-secondary">
+                <Link to={`/game/${game.id}`} className="btn btn-secondary">
                   Go to Image
                 </Link>
               </div>
