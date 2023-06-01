@@ -14,15 +14,15 @@ const storage = getStorage(app);
 //fireSTORE database ref
 const db = getFirestore(app);
 
-const useFirebaseUpload = (image, user) => {
+const useFirebaseUpload = (image, user, coordinates, radius, shouldUpload) => {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [isUploaded, setIsUploaded] = useState(false);
 
   useEffect(() => {
-    if (image && image.type.includes("image/") && user) {
+    if (shouldUpload && image && image.type.includes("image/") && user) {
       const storageRef = ref(storage, image.name);
-
       const uploadTask = uploadBytesResumable(storageRef, image);
 
       uploadTask.on(
@@ -34,7 +34,7 @@ const useFirebaseUpload = (image, user) => {
         },
         (err) => {
           setError(err);
-          console.error("Error uploading image:", err);
+          setIsUploaded(false);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref)
@@ -43,26 +43,28 @@ const useFirebaseUpload = (image, user) => {
 
               addDoc(collection(db, "images"), {
                 url: downloadURL,
-                userId: user.uid, // store userId in document too
+                userId: user.uid,
+                coordinates: coordinates,
+                radius: radius,
               })
                 .then((docRef) => {
-                  console.log("document added ID:", docRef.id);
+                  setIsUploaded(true);
                 })
                 .catch((err) => {
                   setError(err);
-                  console.error("error adding document:", err);
+                  setIsUploaded(false);
                 });
             })
             .catch((err) => {
               setError(err);
-              console.error("error getting image URL:", err);
+              setIsUploaded(false);
             });
         }
       );
     }
-  }, [image, user]);
+  }, [image, user, coordinates, radius, shouldUpload]);
 
-  return { progress, url, error };
+  return { progress, url, error, isUploaded, setIsUploaded };
 };
 
 export default useFirebaseUpload;
